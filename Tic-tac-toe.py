@@ -1,5 +1,6 @@
-#lst = [['X',' ',' '], [' ',' ',' '], [' ',' ',' ']]
+# This is a Tic-tac-toe Terminal Game
 def print_board(board):
+    # prints the board
     a = board[0][0]
     b = board[0][1]
     c = board[0][2]
@@ -158,3 +159,13 @@ def main():
             break
 
 main()
+
+# Main improve of the 1.2 version:
+
+### 1. **Input Validation and Error Handling**
+
+### 3. **Better Game Flow Logic**
+
+### 4. **Add Position Reference Guide**
+
+### 5. **Add Replay Functionality**
