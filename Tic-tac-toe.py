@@ -1,4 +1,3 @@
-# This is a Tic-tac-toe game based on the terminal
 #lst = [['X',' ',' '], [' ',' ',' '], [' ',' ',' ']]
 def print_board(board):
     a = board[0][0]
@@ -83,39 +82,79 @@ def start_new_game():
     print("---------------------------------------------------------------------------------------")
     print("For playing the game, two players are needed!,")
     print("One player use the 'X' mark and the other one use the 'O' mark.")
-    print("---------------------------------------------------------------------------------------")
+    print("--------------------------------------------------------------------------------اريات")
+    show_position_guide()
     print_board(new_board)
     return new_board
 
 def play_game():
     board = start_new_game()
-    while not is_board_full(board):
-
-        print("For player X (Enter number 1 - 3):")
-        x_Hori = int(input("Please enter the number of the horizontal row you want to place the mark 'X' with:")) -1
-        x_Vert = int(input("Please enter the number of the vertical row you want to place the mark 'X' with:")) -1
-        board[x_Hori][x_Vert] = 'X'
+    current_player = 'X'
+    
+    while True:
+        # Get valid move
+        while True:
+            row, col = get_valid_input(current_player)
+            if is_position_empty(board, row, col):
+                board[row][col] = current_player
+                break
+            else:
+                print("That position is already taken! Try again.")
+        
         print_board(board)
-        if check_winner(board) == 'X':
-            print("You Win!")
-            return "X!"
+        
+        # Check for the winner
+        winner = check_winner(board)
+        if winner:
+            print(f"Player {winner} wins! 🎉")
+            return winner
+        
+        # Check for tie
+        if is_board_full(board):
+            print("It's a tie! 🤝")
+            return None
+        
+        # Switch players
+        current_player = 'O' if current_player == 'X' else 'X'
 
-        print("For player O (Enter number 1 - 3 and press enter to continue):")
-        o_Hori = int(input("Please enter the number of the horizontal row you want to place the mark 'O' with:")) -1
-        o_Vert = int(input("Please enter the number of the vertical row you want to place the mark 'O' with:")) -1
-        board[o_Hori][o_Vert] = 'O'
-        print_board(board)
-        if check_winner(board) == 'O':
-            print("You Win!")
-            return "O"
-    return None
+def get_valid_input(player_mark):
+    """Get valid row and column input from the player"""
+    while True:
+        try:
+            print(f"For player {player_mark} (Enter number 1 - 3):")
+            row = int(input(f"Please enter the horizontal row for '{player_mark}': ")) - 1
+            col = int(input(f"Please enter the vertical column for '{player_mark}': ")) - 1
+            
+            if 0 <= row <= 2 and 0 <= col <= 2:
+                return row, col
+            else:
+                print("Please enter numbers between 1 and 3!")
+        except ValueError:
+            print("Please enter valid numbers!")
+
+def is_position_empty(board, row, col):
+    """Check if the position is empty"""
+    return board[row][col] == ' '
+
+def show_position_guide():
+    """Show a position reference guide for the players"""
+    print("Position guide (row, column):")
+    print("╔═══╦═══╦═══╗")
+    print("║1,1║1,2║1,3║")
+    print("╠═══╬═══╬═══╣")
+    print("║2,1║2,2║2,3║")
+    print("╠═══╬═══╬═══╣")
+    print("║3,1║3,2║3,3║")
+    print("╚═══╩═══╩═══╝")
 
 
 def main():
-    winer = play_game()
-    if winer is None:
-        print("It's a tie!")
-    else:
-        print("Congratulations, " + winer + "!")
+    while True:
+        winner = play_game()
+        
+        play_again = input("\nWould you like to play again? (y/n): ").lower().strip()
+        if play_again not in ['y', 'yes']:
+            print("Thanks for playing! 👋")
+            break
 
 main()
